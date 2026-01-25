@@ -11,8 +11,8 @@ from matplotlib.patches import Patch
 from scipy.stats import gaussian_kde
 
 # Import analysis functions for plotting derived properties like peaks or fits
-from Gen_Unfold.src.analysis import find_force_peaks, calculate_unfolding_energy, calculate_max_force
-from Gen_Unfold.src.analysis import wlc_model, fit_wlc_to_unfolding_segments # If you want to visualize fits
+from ..analysis import find_force_peaks, calculate_unfolding_energy, calculate_max_force
+from ..analysis import wlc_model, fit_wlc_to_unfolding_segments # If you want to visualize fits
 
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message')

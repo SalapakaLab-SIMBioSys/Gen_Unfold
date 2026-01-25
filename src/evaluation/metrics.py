@@ -18,7 +18,7 @@ from torch.utils.data import TensorDataset, DataLoader
 from tqdm import tqdm
 
 # Import analysis functions to evaluate derived properties
-from Gen_Unfold.src.analysis.mechanical_properties import calculate_unfolding_energy, calculate_max_force, find_force_peaks
+from ..analysis.mechanical_properties import calculate_unfolding_energy, calculate_max_force, find_force_peaks
 
 logging.basicConfig(
     level=logging.INFO,

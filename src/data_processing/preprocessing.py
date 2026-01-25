@@ -12,7 +12,7 @@ from scipy.signal import savgol_filter, find_peaks
 # Set up logging
 from sklearn.preprocessing import StandardScaler
 
-from Gen_Unfold.src.analysis.curve_fitting import fit_wlc_segment, wlc_model
+from ..analysis.curve_fitting import fit_wlc_segment, wlc_model
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -590,7 +590,6 @@ def preprocess_node_features(pdb_ids: List[str], node_feature_path: str, target_
         node_feature_lengths.append(length)
 
     return np.array(node_feature_arr), np.array(node_feature_lengths)
-
 
 
 

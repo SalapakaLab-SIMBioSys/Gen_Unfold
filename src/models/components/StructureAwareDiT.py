@@ -25,11 +25,11 @@ import torch
 import torch.nn as nn
 from torch import Tensor
 
-from Gen_Unfold.src.models.components.model_utils import (
+from .model_utils import (
     PositionalEncoding,
     ResBlock)
 
-from Gen_Unfold.src.models.components.diffusion_transformer import (
+from .diffusion_transformer import (
     PatchEmbed1D,
     DiTBlock,
     FinalLayer1D,
