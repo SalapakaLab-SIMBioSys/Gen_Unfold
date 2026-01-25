@@ -5,7 +5,7 @@ import pandas as pd
 import tqdm
 from transformers import EsmModel, EsmTokenizer
 import torch
-from Gen_Unfold.src.data_processing.prtein_feature_extractor import cif_chain_sequences
+from .prtein_feature_extractor import cif_chain_sequences
 
 def load_model(model_name="facebook/esm2_t33_650M_UR50D", cache_dir="D:\\pretained_model\\esm\\"):
     model_name = model_name
@@ -98,6 +98,5 @@ def process_from_data_table(data_table_path, output_path):
                 np.save(embedding_path, sequence_embedding.mean(0))
         except Exception as e:
             print(f"Error processing {mol_name}: {e}")
-
 
 
