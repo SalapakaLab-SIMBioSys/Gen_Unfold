@@ -1,4 +1,4 @@
-# Gen_Unfold: Diffusion Model for Protein Mechanical Unfolding Curves
+# GenUnfold: Rapidly Predict Protein Mechanical Unfolding Trajectory via a Physics-Guided Diffusion Model
 
 ## Overview
 
