@@ -4,18 +4,27 @@
 
 Gen_Unfold provides a conditional diffusion-based workflow for generating protein mechanical force–extension (F–E) curves and extracting mechanical properties (e.g., unfolding force) from the generated distributions. The repository includes core model code, data processing utilities, evaluation/analysis helpers, and example scripts for training, inference, and plotting.
 
+## Motivation
+
+Single-molecule force spectroscopy (SMFS) provides valuable insights into protein mechanics at the single-molecule level. However, experimental data acquisition can be time-consuming and challenging, and the resulting F-E curves are inherently stochastic and noisy. Molecular dynamics (MD) simulations can generate large datasets but are computationally expensive, especially for slow unfolding events or large proteins.
+
+This project explores using generative models, specifically Diffusion Models, to learn the complex distribution of F-E curves from available data (simulated). A well-trained conditional model can potentially:
+- Generate realistic synthetic F-E curves for various proteins and conditions.
+- Supplement limited experimental data for downstream analysis.
+- Aid in understanding the relationship between protein sequence, unfolding conditions, and mechanical response.
+- Facilitate the inference of mechanical properties directly from the generated distributions.
+
 ## Repository Layout (Current)
 
 ```
 .
-├── 1.py                     # Utility script for generating requirements from imports
 ├── README.md
-├── __init__.py
 ├── requirements.txt
+├── data                      # (Optional) Dataset directory for training
 ├── scripts
 │   ├── run.py                # Training/inference entrypoint (edit paths before use)
-│   ├── run.ipynb             # Notebook example for training/inference
-│   ├── results.py            # Plotting and evaluation helpers
+│   ├── inference.ipynb       # Notebook example for inference
+│   ├── results.py            # Plotting and evaluation results in the paper
 │   ├── data                  # Sample data (curves, labels, metadata)
 │   ├── 1emb                  # Example PDB-derived features and outputs
 │   └── sample_results        # Example output figures
@@ -46,7 +55,7 @@ pip install -r requirements.txt
 
 ### 1) Training
 
-Edit paths in `scripts/run.py` (or the notebook `scripts/run.ipynb`) to point to your local configuration and data, then run:
+Edit paths in `scripts/run.py` to point to your local configuration and data, then run:
 
 ```bash
 python scripts/run.py

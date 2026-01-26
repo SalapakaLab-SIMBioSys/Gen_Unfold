@@ -285,7 +285,7 @@ def extract_features_from_pdb(pdb_id_or_path: str,
             embedding = None  # placeholder; plug in your ESM/PLM embedding if available
         else:
             seq = get_chain_sequence(df_all, chain)
-            embedding = embed_sequence(seq, model, tokenizer)
+            embedding = embed_sequence(seq, model, tokenizer).mean(axis=0)
     else:
         embedding = np.load(embedding_npy)
 

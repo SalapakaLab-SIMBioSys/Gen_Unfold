@@ -1,38 +1,32 @@
+import os
+import numpy as np
+from tqdm import tqdm
+
+from Gen_Unfold.src.data_processing.prtein_feature_extractor import load_structure, residue_contact_map
 from Gen_Unfold.src import (train_pipeline, curve_prediction)
 
-
-def train():
-    seeds = [42, 37, 56]
-
-    for i in range(0, 3):
-        train_pipeline(
-            fr'C:/PycharmProjects/pythonProject1/Gen_SMFS/config/ablation_study/E04.yaml',
-            #checkpoint_path=r"C:/RawData/checkpoints/DiffusionModelTrainer\202510291514\checkpoint_epoch_80.pt",
-            seed=seeds[i])
-
-
-def inference():
-    pretrained_model_path = r"C:\RawData\checkpoints\DiffusionModelTrainer\202510251933"
-    num_samples = 1024
-
-    # GFP 1EMB
-    curve_prediction(pretrained_model_path,
-                     pdb_id_or_path=r'D:\Dataset\Mech\mmCif_files\1emb.cif',
-                     chain='A',
-                     feature_path=r'D:\Dataset\Mech\features',
-                     save_path=r'D:\Dataset\Mech\features\1emb\old\predictions.npy',
-                     num_samples=num_samples,
-                     device='cuda',
-                     eta=0.0,
-                     )
-
-
-
+def build_features(pdb_dir, save_dir):
+    filenames = os.listdir(pdb_dir)
+    for filename in tqdm(filenames):
+            try:
+                path = os.path.join(pdb_dir, filename)
+                structure = load_structure(path)
+                map = residue_contact_map(structure)
+                output_path = os.path.join(save_dir, filename[:4], 'res_map')
+                np.save(output_path, map)
+            except Exception as exc:
+                print(filename, exc)
 
 if __name__ == '__main__':
+    # Example usage of feature building
+    pdb_directory = r'../data/pdb_files'
+    features_save_directory = r'../data/features'
 
-    #train()
-    inference()
+    if os.path.exists(r'../data/pdb_files/pdb.cif'):
+        raise "Please put your pdb files in the folder '../data/pdb_files' before running the script."
+
+    build_features(pdb_directory, features_save_directory) # After building features, you can comment this line to avoid rebuilding.
+    train_pipeline("../config/config.yaml", seed=42)
 
 
 

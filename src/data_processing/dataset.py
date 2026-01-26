@@ -15,7 +15,7 @@ import logging
 
 from tqdm import tqdm
 
-from .utils import AMINO_ACID_DIC, SEC_CODE, create_cath_maps
+from .utils import AMINO_ACID_DIC, SEC_CODE, create_cath_maps, extract_features_from_pdb
 
 # Set up logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -619,7 +619,12 @@ class FEDatasetStructure(FEDataset):
 
                 # Only check for existence of res_map_path, don't load it
                 if not all(p.exists() for p in [protein_embedding_path, residue_feature_path, res_map_path]):
-                    continue
+                    extract_features_from_pdb(pdb_id_or_path=pdb_id,
+                                              chain=chain,
+                                              feature_path=self.sequences_path, )
+                    if not all(p.exists() for p in [protein_embedding_path, residue_feature_path, res_map_path]):
+                        logging.warning(f"Skipping {pdb_id}_{chain}: missing one or more files.")
+                        continue
 
                 protein_embedding = np.load(protein_embedding_path)
                 residue_df = pd.read_csv(residue_feature_path)

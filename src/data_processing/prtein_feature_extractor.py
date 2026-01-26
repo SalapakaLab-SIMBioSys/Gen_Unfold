@@ -8,7 +8,7 @@ from typing import List, Tuple, Dict, Any
 import Bio
 import torch
 from Bio.PDB import PDBParser, DSSP, NeighborSearch, MMCIFParser, Atom
-from Bio.PDB.Polypeptide import is_aa, Polypeptide
+from Bio.PDB.Polypeptide import is_aa, Polypeptide, one_to_index, index_to_three, index_to_one, three_to_index
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqUtils import seq1
@@ -165,7 +165,7 @@ def get_chain_sequence(df: pd.DataFrame, chain_id: str) -> str:
     """
     chain_df = df[df["chain"].astype(str) == chain_id].sort_values("res_idx")
 
-    seq = "".join([Bio.PDB.Polypeptide.seq1(res) if len(res) == 3 else res
+    seq = "".join([index_to_one(three_to_index(res)) if len(res) == 3 else res
                    for res in chain_df["res_name"]])
     return seq
 
@@ -1049,50 +1049,6 @@ def process_all(pdb_path, func, output_path, max_threads=16, **kwargs):
 
     print(f"[Done] {success_count}/{len(pdb_path)} saved.")
 
-
-def main():
-    filenames = os.listdir(r'D:\Dataset\Mech\mmCif_files')
-    for filename in tqdm(filenames):
-        try:
-            path = os.path.join(r'D:\Dataset\Mech\mmCif_files', filename)
-            structure = load_structure(path)
-            map = residue_contact_map(structure)
-            output_path = os.path.join(r'D:\Dataset\Mech\features', filename[:4], 'res_map')
-            np.save(output_path, map)
-        except Exception as exc:
-            print(filename, exc)
-
-
-if __name__ == '__main__':
-    pdb_path = 'D:\Dataset\Mech\mmCif_files'
-    func = per_chain_relative_distance_matrices
-    output_path = r'D:\Dataset\Mech\features'
-    #process_all(pdb_path, func, output_path)
-    dis = func(r'D:\Dataset\Mech\mmCif_files\1yzx.cif')[0]['A']
-    structure = load_structure(r'D:\Dataset\Mech\mmCif_files\1yzx.cif')
-    dssp = run_dssp(structure, r'D:\Dataset\Mech\mmCif_files\1yzx.cif', dssp_exec="mkdssp")
-
-    L, C, N = ENMGreenFunction()(torch.from_numpy(dis).unsqueeze(0), torch.tensor([[50, 100]]))
-
-    plt.imshow(-dis)
-    plt.colorbar()
-    plt.show()
-
-    plt.imshow(np.log(L[0]))
-    plt.colorbar()
-    plt.show()
-
-    plt.imshow(-C[0])
-    plt.colorbar()
-    plt.show()
-
-    plt.imshow(-N[0])
-    plt.colorbar()
-    plt.show()
-
-    plt.imshow((-L-C-N)[0])
-    plt.colorbar()
-    plt.show()
 
 
 
