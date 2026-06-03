@@ -104,4 +104,4 @@ Example plots are available in `scripts/sample_results/`.
 
 ## License
 
-Specify your project's license here.
+MIT 4.0
